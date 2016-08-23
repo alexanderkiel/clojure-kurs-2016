@@ -45,18 +45,18 @@ Unser Clojure Projekt besteht aus folgenden Verzeichnissen:
 * `project.clj` - Leiningen Clojure Projektdatei, unabhängig von IDEA, wird manuell editiert
 * `README.md` - README Datei im [Markdown][1] Format
 
-Das `src` und `test` Verzeichnis enthält den Quell- bzw. Testcode. Clojure Quellcode ist in sogenannten Namespaces organisiert. Namespaces (also Namensräume) dienen dazu den Quellcode in logisch voneinander abtrennbare Einheiten zu unterteilen. Als Programmierer ist man hier relativ frei. Wir werden mit der Zeit ein Gefühl dafür entwickeln, welche Namespaces ein Projekt üblicherweise hat und wie wir unseren Quellcode aufteilen. Ein Namespace ist in den meisten Clojure Projekten vorhanden. Dieser Namespace heißt `<my-project>.core`. In Bibliotheken enthält dieser Core-Namespace meist die Public API. In Applikationen enthält der Core-Namespace üblicherweise die `-main` Funktion.
+Das `src` und `test` Verzeichnis enthält den Quell- bzw. Testcode. Clojure Quellcode ist in sogenannten Namespaces organisiert. Namespaces (also Namensräume) dienen dazu den Quellcode in logisch voneinander abtrennbare Einheiten zu unterteilen. Als Programmierer ist man hier relativ frei. Wir werden mit der Zeit ein Gefühl dafür entwickeln, welche Namespaces ein Projekt üblicherweise hat und wie wir unseren Quellcode aufteilen. Ein Namensraum ist in den meisten Clojure Projekten vorhanden. Dieser Namensraum heißt `<my-project>.core`. In Bibliotheken enthält dieser Core-Namensraum meist die Public API. In Applikationen enthält der Core-Namensraum üblicherweise die `-main` Funktion.
 
 ### Erste Hello World Ausgabe
 
-Wir passen unseren Core-Namespace `coffee.core` an, indem wir die Funktion `foo` durch folgende Funktion ersetzen:
+Wir passen unseren Core-Namensraum `coffee.core` an, indem wir die Funktion `foo` durch folgende Funktion ersetzen:
  
 ```clojure
 (defn -main [& args]
   (println "Hello, World!"))
 ```
 
-weiterhin spezifizieren wir in der `project.clj` unseren Core-Namespace als Hauptnamensraum:
+weiterhin spezifizieren wir in der `project.clj` unseren Core-Namensraum als Hauptnamensraum:
 
 ```clojure
 :main coffee.core
@@ -66,7 +66,7 @@ Danach konnen wir unser Programm mittels `lein run` ausführen.
 
 ### Der erste Webserver
 
-Wir fügen die Bibliothek `[aleph "0.4.1"]` zu unseren Projektabhänigkeiten hinzu. [Aleph][2] stellt neben Dingen einen Webserver bereit. Wir ersetzen unseren Core-Namespace durch folgenden Quellcode:
+Wir fügen die Bibliothek `[aleph "0.4.1"]` zu unseren Projektabhänigkeiten hinzu. [Aleph][2] stellt neben Dingen einen Webserver bereit. Wir ersetzen unseren Core-Namensraum durch folgenden Quellcode:
 
 ```clojure
 (ns coffee.core
@@ -85,5 +85,78 @@ Wir fügen die Bibliothek `[aleph "0.4.1"]` zu unseren Projektabhänigkeiten hin
 
 Nachdem wir `lein run` ausgeführt haben, können wir im Browser auf `http://localhost:8080` welchseln. Wir sollten die Ausgabe `Hello, World!` sehen.
 
+## Session 2
+
+Heute wollen wir ein HTML Formular erzeugen, welches es erlaubt ein Getränk abzurechnen. Wir werden uns dabei auf die HTML Ausgabe konzentrieren und lassen die Datenbank erst einmal weg. Wir implementieren das Feature also von der Oberfläche hin zum Backend. Dies ist ein übliches Vorgehen, um im Backend nur das absolut Notwendige umzusetzen.
+
+### Klonen des Github Projektes Takelist
+
+Ich habe unser Projekt vom letzten Mal unter [takelist][3] auf Github gestellt. Wir klonen das Repository mittels IDEA über `VCS` -> `Checkout from Version Control` -> `Git`. Danach starten wir unseren Webserver mittels `lein run` und schauen, dass auf `http://localhost:8080` die Hello World Ausgabe sehen.
+
+### Erstellen eines User Namespaces (Issue 1)
+
+
+Wir erstellen auf der obersten Ebene unseres Projektverzeichnisses ein `dev` Verzeichnis. Dort landen alle Quellen, die nur zur Entwicklungszeit benötigt werden. In der `project.clj` tragen wir unter `:profiles` Folgendes ein:
+
+```clojure
+{:dev
+ {:source-paths ["dev"]
+  :dependencies [[org.clojure/tools.namespace "0.2.11"]]}
+ 
+ :production
+ {:main takelist.core}}
+```
+
+Damit verschieben wir die Definition des Hauptnamensraumes in das Profil `:production` und fügen das Verzeichnis `dev` zu den Quellcode Verzeichnissen hinzu. Die Abhängigkeit `tools.namespace` benötigen wir für das Neuladen unseres Quellcodes zur Laufzeit. Nach einem Reload im Leiningen Toolfenster, sollte das `dev` Verzeichnis blau eingefärbt werden.
+
+Wir legen im `dev` Verzeichnis folgende `user.clj` an:
+
+```clojure
+(ns user
+  (:require [clojure.tools.namespace.repl :refer [refresh]]))
+
+(comment
+  (refresh)
+  )
+```
+
+Ein Aufruf der `refresh` Funktion wird später unseren Quellcode zur Laufzeit neu laden. Wir erstellen im IDEA eine Run Konfiguration, welche uns eine REPL zur Verfügung stellt. Dazu gehen wir auf `Run` -> `Edit Configurations` und legen dort eine neue `Clojure REPL` -> `Local` an. Wir nennen die Run Konfiguration `REPL` und ändern die `Before launch` Konfiguration auf `Synchronize Leiningen Projects` ab. Danach starten wir unsere REPL. Die Ausgabe sollte folgendermaßen aussehen:
+
+```
+Starting nREPL server...
+/Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/bin/java ...
+Connecting to local nREPL server...
+Clojure 1.8.0
+nREPL server started on port 59747 on host 127.0.0.1 - nrepl://127.0.0.1:59747
+```
+
+Nachdem wir unsere REPL gestartet haben, wir automatisch der `user` Namensraum geladen. Unser `takelist.core` Namensraum wird hingegen nicht geladen und selbst dann wird nicht die dort enthaltene `-main` Funktion ausgeführt. Dies geschied lediglich beim Aufruf von `lein run` mit entsprechender `:main` Konfiguration. D.h. wir können entweder die `-main` Funktion in der REPL aufrufen oder den Server anderweitig starten. Wir entscheiden uns für letzteres, da wir die `-main` Funktion speziell als produktiven Einstiegspunkt erhalten wollen, wohingegen wir in der REPL zur Entwicklungszeit eine etwas abweichende Startprozedur verwenden, die es uns erlaubt den Quellcode zur Laufzeit neu zu laden.
+
+Um den Server im `user` Namensraum starten zu können fügen wir folgende Abhänigkeiten hinzu:
+ 
+```clojure
+[aleph.http :as http]
+[takelist.core :refer [handler]]
+```
+
+Weiterhin definieren wir die Variable `server` wie folgt:
+
+```clojure
+(def server (http/start-server handler {:port 8080}))
+```
+
+und fügen `(.close server)` in den Kommentarblock vor `(refresh)` hinzu.
+
+Wenn wir jetzt einmal die REPL komplet neu starten, sollte unser Server laufen und `Hello, World!` ausgeben. Danach ändern wir die Hello World Ausgabe etwas ab, speichern die Datei und rufen nacheinander `(.close server)` und `(refresh)` auf. Die Ausgabe sollte sich im Browser entsprechend ändern.
+
+Wir müssen den Server schließen, damit dieser seine Ressourcen (den offenen Port) freigeben kann. Beim Neuladen des `user` Namensraumes wird unser Server dann automatisch neu gestartet, da die Definition der Variablen `server` neu ausgeführt wird. Später werden wir das starten und stoppen des Servers noch verbessern.
+
+## Ausgabe des HTML Formulars zur Getränkeabrechnung
+
+Zur Ausgabe von HTML werden wir die Bibliothek [Hiccup][4] verwenden. Dazu binden wir die Abhängigkeit `[hiccup "1.0.5"]` in unsere `project.clj` ein. Hiccup erlaubt es uns HTML Seiten in Clojure Datenstrukturen anzulegen. D.h. wir können darauf verzichten Strings zusammenbauen zu müssen. Eine andere Möglichkeit ware es ein Template System zu verwenden. Das hätte den Vorteil, dass ein Designer das Template der Webseite erstellen kann, welcher Clojure nicht beherrscht. Solch ein Template System ist beispielsweise [Enlive][5]. Für uns ist es aber vorteilhafter direkt in Clojure zu bleiben. Ein Template System wäre zu aufwendig. 
+
 [1]: <https://daringfireball.net/projects/markdown/>
 [2]: <http://aleph.io>
+[3]: <https://github.com/alexanderkiel/takelist>
+[4]: <https://github.com/weavejester/hiccup>
+[5]: <https://github.com/cgrand/enlive>
