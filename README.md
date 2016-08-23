@@ -22,6 +22,8 @@ Als Versionsverwaltungssystem setzen wir Git ein. Um Git in unserem Projekt zu i
     
 Danach öffnen wir unser Projekt in IDEA. Das Projekt sollte von IDEA automatisch als Leinigen Projekt erkannt werden. Gut zu erkennen ist das daran, dass im Leiningen Toolfenster ein Eintrag `coffee:0.1.0-SNAPSHOT` existiert. Weiterhin wird IDEA das initialisierte Git Repository erkennen. In den Einstellungen sollte unter `Version Control` ein Eintrag `<Project>` - `Git` auftauchen. Wenn wir schon einmal in den Einstellungen sind, können wir gleich den Hacken bei `Commit message right margin (columns) 72` setzen.
 
+Weiterhin setzen wir unter `Editor` -> `Code Style` den rechten Rand (Right margin) auf 80 Zeichen. Damit bekommen wir im Editor einen vertikalen Strich angezeigt, der uns daran erinnert, dass unser Quellcode nicht breiter als 80 Zeichen werden soll. 80 Zeichen ist ein gutes Maß für Clojure Quellcode.
+
 Als nächstes löschen wir Dateien und Verzeichnisse, die wir nicht benötigen. Das sind: `doc`,
 `.hgignore` und `CHANGELOG.md`. Danach fügen wir die beiden Einträge `/.idea/` und `/*.iml` in der `.gitignore` hinzu.
 
