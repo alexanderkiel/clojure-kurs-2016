@@ -151,7 +151,9 @@ Wenn wir jetzt einmal die REPL komplet neu starten, sollte unser Server laufen u
 
 Wir müssen den Server schließen, damit dieser seine Ressourcen (den offenen Port) freigeben kann. Beim Neuladen des `user` Namensraumes wird unser Server dann automatisch neu gestartet, da die Definition der Variablen `server` neu ausgeführt wird. Später werden wir das starten und stoppen des Servers noch verbessern.
 
-## Ausgabe des HTML Formulars zur Getränkeabrechnung
+## Kommende Session 3 (30.08.16)
+
+### Ausgabe des HTML Formulars zur Getränkeabrechnung
 
 Zur Ausgabe von HTML werden wir die Bibliothek [Hiccup][4] verwenden. Dazu binden wir die Abhängigkeit `[hiccup "1.0.5"]` in unsere `project.clj` ein. Hiccup erlaubt es uns HTML Seiten in Clojure Datenstrukturen anzulegen. D.h. wir können darauf verzichten Strings zusammenbauen zu müssen. Eine andere Möglichkeit ware es ein Template System zu verwenden. Das hätte den Vorteil, dass ein Designer das Template der Webseite erstellen kann, welcher Clojure nicht beherrscht. Solch ein Template System ist beispielsweise [Enlive][5]. Für uns ist es aber vorteilhafter direkt in Clojure zu bleiben. Ein Template System wäre zu aufwendig. 
 
