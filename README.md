@@ -151,7 +151,7 @@ Wenn wir jetzt einmal die REPL komplet neu starten, sollte unser Server laufen u
 
 Wir müssen den Server schließen, damit dieser seine Ressourcen (den offenen Port) freigeben kann. Beim Neuladen des `user` Namensraumes wird unser Server dann automatisch neu gestartet, da die Definition der Variablen `server` neu ausgeführt wird. Später werden wir das starten und stoppen des Servers noch verbessern.
 
-## Session 3
+## Session 3 (30.08.16)
 
 ### Ausgabe des HTML Formulars zur Getränkeabrechnung
 
@@ -159,12 +159,34 @@ Zur Ausgabe von HTML werden wir die Bibliothek [Hiccup][4] verwenden. Dazu binde
 
 TODO: vervollständigen
 
-## Kommende Session 4 (13.09.16)
+## Session 4 (13.09.16)
 
-TODO: anfangen
+Wir haben heute unser HTML Formular weiter ausgebaut. Dabei haben wir [Bootstrap][6] als Basis für CSS eingesetzt. Wir werden auch weiterhin regen Gebrauch von HTML und CSS machen. Wer in dem Gebiet nicht so fit ist, für den ist die Bootstrap Dokumentation und die Seite [w3schools.com][6] ein guter Startpunkt.
+
+Weiterhin haben wir die Seite [ClojureDocs][7] und dort speziell die [Quickref for Clojure Core][8] benutzt, um geeignete Funktionen zu finden. Ganz neu dabei war die [Sequence Abstraktion][9], die ich so noch nicht behandelt hatte. Sequenzen stellen dabei als Konzept eine Obermenge von Listen, Vektoren und Lazy Sequenzen dar, mit deren Hilfe auf diese unterschiedlichen Datenstrukturen gleichartig zugegriffen werden kann.
+
+Lazy Sequenzen werden im Gegensatz zu normalen Listen erst beim Zugriff realisiert. Dadurch kann man mit unendlich langen Sequenzen arbeiten, solange man davon nur eine endliche Anzahl von Elementen benutzt. 
+
+Ein Beispiel ist die Liste aller natürlicher Zahlen, die man durch die `(range)` Funktion erzeugen lassen kann. Wenn man davon nur die ersten 5 Elemente nimmt, kann das Ergebnis problemlos ausgegeben werden.
+
+```Clojure
+(take 5 (range))
+;;=> (0 1 2 3 4)
+```
+
+Lazy Sequenzen ermöglichen es eine geringe Kopplung und damit ein hohes Maß an Unabhängigkeit zwischen Producer und Consumer herzustellen. Der Producer `(range)` muss in unserem Fall nicht wissen wie viele Elemente der Consumer `(take 5 ...)` benötigt. Lazy Sequenzen sind ein wichtiger Baustein der Funktionalen Programmierung. Dabei gehen Sprachen wie [Haskell][10] noch einen Schritt weiter, indem diese auf jeglicher Ebene Lazy sind. Clojure hat diese [Lazy Evaluation][11] nicht und ist damit grundsätzlich [strict][12]. Lediglich Sequenzen können in Clojure lazy sein.
+
+TODO: vervollständigen
 
 [1]: <https://daringfireball.net/projects/markdown/>
 [2]: <http://aleph.io>
 [3]: <https://github.com/alexanderkiel/takelist>
 [4]: <https://github.com/weavejester/hiccup>
 [5]: <https://github.com/cgrand/enlive>
+[6]: <http://www.w3schools.com/>
+[7]: <https://clojuredocs.org/>
+[8]: <https://clojuredocs.org/quickref>
+[9]: <https://clojuredocs.org/quickref#sequences>
+[10]: <https://www.haskell.org/>
+[11]: <https://en.wikipedia.org/wiki/Lazy_evaluation>
+[12]: <https://en.wikipedia.org/wiki/Eager_evaluation>
