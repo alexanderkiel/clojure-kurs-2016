@@ -178,6 +178,10 @@ Lazy Sequenzen ermöglichen es eine geringe Kopplung und damit ein hohes Maß an
 
 TODO: vervollständigen
 
+## Session 6 (11.10.16)
+
+Wir haben eine Middleware programmiert, welche ein statisches Dummy Produkt in den Request legt.
+
 [1]: <https://daringfireball.net/projects/markdown/>
 [2]: <http://aleph.io>
 [3]: <https://github.com/alexanderkiel/takelist>
